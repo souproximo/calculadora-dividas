@@ -395,17 +395,25 @@ input[type="text"]:hover { border-color: var(--muted); }
 
 /* ---------- resultado ---------- */
 
-/* As bordas ficam nos itens, não num fundo cinza atrás da grade: com três
-   itens em duas colunas sobraria uma célula pintada de cinza, sem nada. */
+/* Duas decisões aqui, e as duas existem para o quadro nunca ficar com
+   buraco, seja qual for a quantidade de números:
+
+   1. As bordas ficam nos itens, não num fundo cinza atrás da grade — senão
+      célula vazia aparece pintada.
+   2. É flex com os itens crescendo, não grade de colunas fixas. Numa grade,
+      quatro itens em três colunas deixam o quarto sozinho na segunda linha,
+      com a borda terminando no ar. Crescendo, os itens da última linha se
+      esticam e o retângulo sempre fecha. */
 .placar {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0;
+  display: flex;
+  flex-wrap: wrap;
   border-top: 1px solid var(--rule);
   border-left: 1px solid var(--rule);
   margin: 4px 0 26px;
 }
 .placar-item {
+  flex: 1 1 150px;
+  min-width: 150px;
   padding: 14px 16px;
   border-right: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
