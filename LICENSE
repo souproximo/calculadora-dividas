@@ -1,0 +1,57 @@
+O conteúdo deste repositório tem duas licenças, conforme o tipo de arquivo.
+
+================================================================================
+1. CÓDIGO — Licença MIT
+================================================================================
+
+Vale para os arquivos de código: HTML, CSS, JavaScript e scripts auxiliares.
+
+Copyright (c) 2026 Leandro Reinaux — Sou Próximo
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+2. TEXTO — Creative Commons Atribuição 4.0 Internacional (CC BY 4.0)
+================================================================================
+
+Vale para o texto das páginas e da documentação (README, CONTRIBUTING e o
+conteúdo escrito dentro dos arquivos HTML).
+
+Você pode copiar, adaptar e redistribuir esse texto, inclusive comercialmente,
+desde que dê o crédito. Licença completa:
+https://creativecommons.org/licenses/by/4.0/deed.pt-br
+
+================================================================================
+3. FONTES — SIL Open Font License 1.1
+================================================================================
+
+As fontes Archivo e Spectral, na pasta fonts/, seguem a SIL OFL 1.1. Os textos
+das duas licenças estão junto dos arquivos, em fonts/.
+
+================================================================================
+4. NOME E MARCA — não licenciados
+================================================================================
+
+O nome "Sou Próximo", a marca gráfica (os dois círculos) e os domínios do
+projeto NÃO estão cobertos pelas licenças acima e não podem ser usados para
+identificar trabalhos derivados.
+
+O código é livre justamente para ser reusado. O nome fica de fora para que
+ninguém possa se apresentar como sendo este projeto — se a credibilidade é o
+que o projeto tem para oferecer, ela não pode ser vestida por terceiros.

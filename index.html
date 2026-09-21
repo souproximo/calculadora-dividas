@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Calculadora de dívidas — Sou Próximo</title>
+<meta name="description" content="Some tudo o que você deve, veja quanto cada dívida cresce por mês e em que ordem pagar. A conta é feita no seu aparelho e nada do que você digitar sai dele.">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Sou Próximo">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Calculadora de dívidas">
+<meta property="og:description" content="Some tudo o que você deve, veja quanto cada dívida cresce por mês e em que ordem pagar. Nada do que você digitar sai do seu aparelho.">
+
+<link rel="icon" href="./favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./calculadora.css">
+<link rel="preload" href="./fonts/spectral-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="./fonts/archivo-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+</head>
+<body>
+
+<div class="sheet">
+
+  <header class="ficha">
+    <p class="marca-projeto"><a href="https://souproximo.org">Sou Próximo</a></p>
+    <h1 class="titulo">Calculadora de dívidas</h1>
+    <p class="tese">Some tudo o que você deve e veja em que ordem pagar.</p>
+
+    <dl class="dados">
+      <dt>O que faz</dt>
+      <dd>Mostra o tamanho da dívida, quanto ela cresce por mês e qual ordem de pagamento sai mais barata</dd>
+      <dt>O que guarda</dt>
+      <dd>Nada</dd>
+      <dt>Conferido em</dt>
+      <dd><span class="selo">21 · 09 · 2026</span></dd>
+    </dl>
+
+    <div class="privacidade">
+      <span class="label">Antes de digitar, leia isto</span>
+      <p><strong>A conta é feita dentro do seu aparelho.</strong> Nada do que você escrever aqui é enviado para lugar nenhum, e nada fica guardado — nem neste site, nem no seu navegador. Se você fechar ou recarregar esta página, os números somem e você começa de novo. Não há cadastro, não há login e não pedimos seu nome, seu CPF nem seu telefone.</p>
+      <p class="fina">Se quiser guardar o resultado, use o botão de imprimir no fim da página e salve em PDF. <a href="https://github.com/souproximo/calculadora-dividas">O código desta página é aberto</a> — quem entende do assunto pode conferir que é verdade.</p>
+    </div>
+  </header>
+
+  <!-- ============================ PASSO 1 ============================ -->
+
+  <section id="passo-1">
+    <div class="label">Passo 1</div>
+    <div class="corpo">
+      <h2>Descobrir tudo o que você deve</h2>
+      <p class="destaque">Quase ninguém sabe de cabeça o tamanho da própria dívida — e sem essa lista não existe conta que ajude. O Banco Central entrega essa lista de graça, na hora, para qualquer pessoa.</p>
+
+      <p>O serviço se chama <strong>Registrato</strong> e hoje fica dentro do <strong>Meu BC</strong>, no site do Banco Central. É gratuito, sai na hora e ninguém precisa saber que você pediu.</p>
+
+      <ol class="passos">
+        <li>
+          <p class="passo-t">Você precisa de uma conta gov.br nível prata ou ouro</p>
+          <p class="passo-d">A conta gov.br tem três níveis: bronze, prata e ouro. Para ver o relatório de dívidas é preciso estar em <strong>prata ou ouro</strong>, com a verificação em duas etapas ligada. Subir de nível costuma ser feito pelo aplicativo do banco em que você já tem conta, ou por reconhecimento facial usando a foto da CNH ou do título de eleitor. Não se paga nada por isso. O passo a passo oficial está em <a href="https://www.gov.br/governodigital/pt-br/conta-gov-br" rel="noopener">gov.br/governodigital</a>.</p>
+        </li>
+        <li>
+          <p class="passo-t">Entre no Meu BC</p>
+          <p class="passo-d">O endereço é <a href="https://www.bcb.gov.br/meubc" rel="noopener">bcb.gov.br/meubc</a>. Entre com a sua conta gov.br e confirme a verificação em duas etapas. Desconfie de qualquer site parecido que apareça em anúncio de busca: o do Banco Central termina em <strong>bcb.gov.br</strong>.</p>
+        </li>
+        <li>
+          <p class="passo-t">Peça o Relatório de Empréstimos e Financiamentos (SCR)</p>
+          <p class="passo-d">É esse o que interessa aqui. Ele lista as suas operações com bancos e financeiras: quanto ainda falta pagar em cada uma, que tipo de operação é e se está em atraso. O relatório aparece na tela na mesma hora e dá para baixar em PDF.</p>
+        </li>
+        <li>
+          <p class="passo-t">Se quiser, peça também os outros</p>
+          <p class="passo-d">No mesmo lugar estão o <strong>Relatório de Contas e Relacionamentos em Bancos (CCS)</strong>, que mostra em que bancos existe conta aberta no seu CPF — útil quando se desconfia de conta aberta por outra pessoa —, o <strong>Relatório de Chaves Pix</strong>, o de <strong>Cheques sem Fundos</strong> e o de <strong>Câmbio e transferências internacionais</strong>.</p>
+        </li>
+      </ol>
+
+      <div class="ressalva">
+        <span class="label">O que o relatório não mostra</span>
+        <p>O Registrato só enxerga o que passa por banco e financeira. <strong>Não aparecem ali</strong>: carnê de loja, dívida com pessoa física ou agiota, conta de luz, água, gás, internet, telefone, aluguel, condomínio, mensalidade de escola, plano de saúde e dívida com a prefeitura ou com a Receita. Essas você precisa levantar por conta própria, uma a uma, antes de somar.</p>
+        <p>Outra coisa diferente: o Registrato mostra <em>o que você deve</em>. Quem mostra <em>se o seu nome está negativado</em> são os birôs de crédito — Serasa, SPC e Boa Vista —, e a consulta do próprio nome neles também é gratuita por lei. São duas listas diferentes e vale olhar as duas.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ PASSO 2 ============================ -->
+
+  <section id="passo-2">
+    <div class="label">Passo 2</div>
+    <div class="corpo">
+      <h2>Escrever as dívidas</h2>
+      <p class="destaque">Uma linha para cada dívida. Se você não souber algum número, tudo bem — a página diz o que dá para fazer sem ele.</p>
+
+      <form id="formulario" novalidate>
+
+        <div id="lista-dividas" class="lista-dividas"></div>
+
+        <div class="acoes-lista">
+          <button type="button" id="adicionar" class="botao">+ Mais uma dívida</button>
+          <button type="button" id="exemplo" class="botao botao-fino">Ver com números de exemplo</button>
+        </div>
+
+        <fieldset class="bloco-renda">
+          <legend class="label">Sobre o seu mês (as duas são opcionais)</legend>
+
+          <div class="campos-renda">
+            <p class="campo">
+              <label for="renda">O que entra por mês</label>
+              <span class="ajuda">O que sobra depois dos descontos — o valor que realmente cai na conta.</span>
+              <input type="text" id="renda" name="renda" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00">
+            </p>
+
+            <p class="campo">
+              <label for="disponivel">Quanto dá para separar por mês para as dívidas</label>
+              <span class="ajuda">Se deixar em branco, a conta usa a soma das parcelas que você escreveu acima.</span>
+              <input type="text" id="disponivel" name="disponivel" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00">
+            </p>
+          </div>
+        </fieldset>
+
+        <div class="acoes-conta">
+          <button type="submit" class="botao botao-forte">Fazer a conta</button>
+          <button type="button" id="limpar" class="botao botao-fino">Apagar tudo</button>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- ========================== RESULTADO =========================== -->
+
+  <section id="resultado" hidden aria-live="polite">
+    <div class="label">O resultado</div>
+    <div class="corpo" id="resultado-corpo"></div>
+  </section>
+
+  <!-- ========================== ENCAMINHAMENTO ====================== -->
+
+  <section id="ajuda">
+    <div class="label">Onde pedir ajuda</div>
+    <div class="corpo">
+      <h2>Esta página não resolve dívida. Estes lugares podem</h2>
+      <p class="destaque">Uma conta organiza o problema. Ela não negocia, não perdoa juros e não tem valor nenhum na frente de um credor. Quem tem poder para isso são os canais abaixo — todos públicos e de graça.</p>
+
+      <dl class="canais">
+        <dt>Procon da sua cidade ou do seu estado</dt>
+        <dd>Atende consumidor, media conversa com o credor e, em vários estados, tem um setor específico de superendividamento que chama todos os credores de uma vez para uma audiência só. É o primeiro lugar a procurar.</dd>
+
+        <dt>Defensoria Pública</dt>
+        <dd>Advogado público, gratuito, para quem não pode pagar um. É quem entra na Justiça pedindo a repactuação das dívidas com base na Lei 14.181/2021, a lei do superendividamento.</dd>
+
+        <dt><a href="https://www.consumidor.gov.br" rel="noopener">consumidor.gov.br</a></dt>
+        <dd>Site oficial do governo federal para reclamar direto com a empresa, por escrito. A empresa tem prazo para responder e tudo fica registrado.</dd>
+
+        <dt>CRAS do seu bairro</dt>
+        <dd>Quando a dívida vem junto com falta do básico — comida, luz cortada, remédio, aluguel atrasado —, o CRAS é a porta de entrada da assistência social e pode dar encaminhamentos que nenhum site dá.</dd>
+
+        <dt>O canal do próprio credor</dt>
+        <dd>Falar direto com quem você deve, por escrito, guardando o número do protocolo. Campanhas de renegociação com desconto abrem e fecham o tempo todo, e quase sempre têm prazo curto.</dd>
+      </dl>
+
+      <div class="ressalva">
+        <span class="label">Duas coisas que este projeto não faz</span>
+        <p><strong>Não indicamos empréstimo, banco, aplicativo nem empresa de “limpa nome”.</strong> Não ganhamos nada com nada disso, e é por isso que não indicamos. Desconfie de quem cobra para negociar dívida em seu nome — o que essas empresas fazem, você faz de graça nos canais acima.</p>
+        <p><strong>Não somos advogado nem defensor público.</strong> O que está nesta página é uma conta e uma explicação, não uma orientação jurídica sobre o seu caso.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div>
+      <span class="dominio"><a href="https://souproximo.org">souproximo.org</a></span>
+      <p class="nota">Informações conferidas em 21 de setembro de 2026. Nada para assinar, nada para comprar, nada para instalar.</p>
+    </div>
+    <div class="rodape-links">
+      <button type="button" id="imprimir" class="botao botao-fino">Imprimir ou salvar em PDF</button>
+      <p class="nota"><a href="https://github.com/souproximo/calculadora-dividas">Código aberto no GitHub</a></p>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Modelo de uma linha de dívida. Fica aqui para o JavaScript clonar. -->
+<template id="modelo-divida">
+  <fieldset class="divida">
+    <legend class="divida-n label">Dívida</legend>
+
+    <div class="divida-campos">
+      <p class="campo campo-nome">
+        <label>De quem é esta dívida</label>
+        <span class="ajuda">Escreva de um jeito que você reconheça depois.</span>
+        <input type="text" class="f-nome" autocomplete="off" placeholder="Cartão, financiamento da moto…">
+      </p>
+
+      <p class="campo">
+        <label>Quanto ainda falta pagar</label>
+        <span class="ajuda">O saldo devedor de hoje, não o valor original.</span>
+        <input type="text" class="f-saldo" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00">
+      </p>
+
+      <p class="campo">
+        <label>Parcela por mês</label>
+        <span class="ajuda">O que você paga todo mês nesta dívida.</span>
+        <input type="text" class="f-parcela" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00">
+      </p>
+
+      <p class="campo">
+        <label>Juros ao mês</label>
+        <span class="ajuda">Está no contrato, na fatura ou no extrato, como “taxa de juros a.m.”.</span>
+        <span class="linha-juros">
+          <input type="text" class="f-juros" inputmode="decimal" autocomplete="off" placeholder="0,00%">
+          <button type="button" class="botao botao-fino f-nao-sei">Não sei</button>
+        </span>
+      </p>
+    </div>
+
+    <div class="descobrir-juros" hidden>
+      <span class="label">Descobrir os juros pela parcela</span>
+      <p class="fina">Com o quanto falta pagar, o valor da parcela e quantas parcelas ainda faltam, dá para calcular os juros embutidos.</p>
+      <p class="campo campo-estreito">
+        <label>Quantas parcelas ainda faltam</label>
+        <input type="text" class="f-n-parcelas" inputmode="numeric" autocomplete="off" placeholder="12">
+      </p>
+      <p class="acoes-lista">
+        <button type="button" class="botao f-calcular-juros">Calcular os juros</button>
+        <button type="button" class="botao botao-fino f-fechar-juros">Fechar</button>
+      </p>
+      <p class="resposta-juros" role="status"></p>
+    </div>
+
+    <p class="divida-remover">
+      <button type="button" class="botao botao-fino f-remover">Tirar esta dívida da lista</button>
+    </p>
+
+    <p class="erro-divida" role="alert" hidden></p>
+  </fieldset>
+</template>
+
+<script type="module" src="./calculadora.js"></script>
+</body>
+</html>

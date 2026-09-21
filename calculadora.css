@@ -1,0 +1,551 @@
+/* ------------------------------------------------------------------ *
+ * Calculadora de dívidas — Sou Próximo
+ *
+ * Mesma tipografia e mesma paleta do souproximo.org: quem chega aqui
+ * precisa reconhecer de onde a página veio.
+ *
+ * Regra 02: nenhuma URL aqui aponta para fora deste domínio. As fontes
+ * ficam em ./fonts. Se você for mexer neste arquivo, mantenha assim.
+ * ------------------------------------------------------------------ */
+
+/* ---------- fontes auto-hospedadas (SIL OFL 1.1, ver fonts/) ---------- */
+
+@font-face {
+  font-family: 'Archivo'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url(./fonts/archivo-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Archivo'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url(./fonts/archivo-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Archivo'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url(./fonts/archivo-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Archivo'; font-style: normal; font-weight: 700; font-display: swap;
+  src: url(./fonts/archivo-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Spectral'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url(./fonts/spectral-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Spectral'; font-style: normal; font-weight: 400; font-display: swap;
+  src: url(./fonts/spectral-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Spectral'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url(./fonts/spectral-latin-ext-400-italic.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Spectral'; font-style: italic; font-weight: 400; font-display: swap;
+  src: url(./fonts/spectral-latin-400-italic.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Spectral'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url(./fonts/spectral-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Spectral'; font-style: normal; font-weight: 600; font-display: swap;
+  src: url(./fonts/spectral-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* ---------- cores ---------- */
+
+:root {
+  color-scheme: light dark;
+  --paper:      #F3F4F0;
+  --paper-sunk: #EAECE5;
+  --ink:        #151D19;
+  --ink-soft:   #4E5A53;
+  --muted:      #6E796F;
+  --rule:       #D6DAD0;
+  --rule-soft:  #E3E6DE;
+  --accent:     #2E6A52;
+  --accent-sunk:#E2EDE6;
+  --clay:       #8C5030;
+  --clay-sunk:  #F4E7DE;
+  --campo-bg:   #FFFFFF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper:      #121714;
+    --paper-sunk: #1A211C;
+    --ink:        #E7EBE4;
+    --ink-soft:   #B3BDB4;
+    --muted:      #8C978D;
+    --rule:       #2C352F;
+    --rule-soft:  #232B26;
+    --accent:     #7FBE9C;
+    --accent-sunk:#17271F;
+    --clay:       #D09468;
+    --clay-sunk:  #261C15;
+    --campo-bg:   #0D110F;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Spectral", Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.62;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 860px;
+  margin: 0 auto;
+  padding-inline: 24px;
+  padding-block: 48px 72px;
+}
+
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible, input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+em { font-style: italic; }
+strong { font-weight: 600; }
+
+.label {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.num, .dados dd, table { font-variant-numeric: tabular-nums; }
+
+/* ---------- cabeçalho ---------- */
+
+header.ficha { border-top: 2px solid var(--ink); padding-top: 20px; }
+
+.marca-projeto {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.13em;
+  text-transform: uppercase; margin: 0 0 14px;
+}
+.marca-projeto a { color: var(--muted); text-decoration: none; }
+.marca-projeto a:hover { color: var(--accent); }
+
+.titulo {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: clamp(32px, 7.5vw, 52px);
+  letter-spacing: -0.028em;
+  line-height: 1.02;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.tese {
+  font-size: clamp(19px, 2.6vw, 23px);
+  line-height: 1.38;
+  max-width: 28ch;
+  margin: 18px 0 0;
+  text-wrap: balance;
+}
+
+.dados {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  margin-top: 32px;
+  border-top: 1px solid var(--rule);
+}
+
+.dados dt {
+  grid-column: 1;
+  padding: 9px 28px 9px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--muted); white-space: nowrap;
+}
+
+.dados dd {
+  grid-column: 2;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rule-soft);
+  font-size: 15.5px;
+}
+
+.selo {
+  display: inline-block;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  padding: 2px 8px 3px;
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.privacidade {
+  margin-top: 30px;
+  background: var(--accent-sunk);
+  border-left: 3px solid var(--accent);
+  padding: 18px 20px;
+}
+.privacidade .label { display: block; color: var(--accent); margin-bottom: 8px; }
+.privacidade p { margin: 0 0 10px; font-size: 16px; line-height: 1.55; }
+.privacidade p:last-child { margin-bottom: 0; }
+.fina { font-size: 15px; color: var(--ink-soft); }
+
+/* ---------- seções ---------- */
+
+section {
+  display: grid;
+  grid-template-columns: 116px 1fr;
+  column-gap: 32px;
+  padding-block: 48px;
+  border-top: 1px solid var(--rule);
+  margin-top: 48px;
+}
+
+section > .label { padding-top: 6px; }
+
+.corpo { max-width: 64ch; min-width: 0; }
+
+.corpo > h2 {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: clamp(23px, 3.6vw, 30px);
+  letter-spacing: -0.018em;
+  line-height: 1.18;
+  margin: 0 0 18px;
+  text-wrap: balance;
+}
+
+.corpo h3 {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  margin: 34px 0 12px;
+}
+
+.corpo > p { margin: 0 0 16px; }
+.destaque { font-size: 19px; line-height: 1.5; }
+
+/* ---------- passos do guia ---------- */
+
+ol.passos { list-style: none; margin: 22px 0 0; padding: 0; counter-reset: passo; }
+
+ol.passos > li {
+  counter-increment: passo;
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  column-gap: 16px;
+  padding-block: 16px;
+  border-bottom: 1px solid var(--rule-soft);
+}
+ol.passos > li:first-child { border-top: 1px solid var(--rule-soft); }
+
+ol.passos > li::before {
+  content: counter(passo, decimal-leading-zero);
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px; font-weight: 700; color: var(--accent);
+  line-height: 1.9; font-variant-numeric: tabular-nums;
+}
+
+.passo-t {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600; font-size: 16.5px; line-height: 1.35; margin: 0 0 4px;
+}
+.passo-d { margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
+
+.ressalva {
+  margin-top: 28px;
+  border-left: 2px solid var(--clay);
+  padding: 2px 0 2px 18px;
+}
+.ressalva .label { color: var(--clay); display: block; margin-bottom: 8px; }
+.ressalva p { margin: 0 0 12px; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
+.ressalva p:last-child { margin-bottom: 0; }
+
+/* ---------- formulário ---------- */
+
+form { margin-top: 24px; }
+
+fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+legend { padding: 0; }
+
+.divida {
+  border: 1px solid var(--rule);
+  background: var(--paper-sunk);
+  padding: 18px 20px 14px;
+  margin-bottom: 16px;
+}
+
+.divida-n { display: block; margin-bottom: 12px; color: var(--accent); }
+
+.divida-campos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 20px;
+}
+.campo-nome { grid-column: 1 / -1; }
+
+.campo { margin: 0 0 12px; display: flex; flex-direction: column; gap: 3px; }
+.campo-estreito { max-width: 220px; }
+
+.campo label {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em;
+}
+
+.ajuda { font-size: 14px; line-height: 1.4; color: var(--muted); }
+
+input[type="text"] {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 17px;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  background: var(--campo-bg);
+  border: 1px solid var(--rule);
+  border-radius: 0;
+  padding: 9px 11px;
+  margin-top: 3px;
+  width: 100%;
+  min-width: 0;
+}
+input[type="text"]:hover { border-color: var(--muted); }
+
+.linha-juros { display: flex; gap: 8px; align-items: stretch; margin-top: 3px; }
+.linha-juros input { margin-top: 0; }
+.linha-juros .botao { white-space: nowrap; }
+
+.descobrir-juros {
+  margin: 4px 0 12px;
+  padding: 14px 16px;
+  background: var(--paper);
+  border: 1px dashed var(--rule);
+}
+.descobrir-juros .label { display: block; margin-bottom: 6px; }
+.descobrir-juros .fina { margin: 0 0 10px; }
+.resposta-juros { margin: 10px 0 0; font-size: 16px; color: var(--accent); min-height: 0; }
+.resposta-juros:empty { display: none; }
+.resposta-juros.ruim { color: var(--clay); }
+
+.divida-remover { margin: 4px 0 0; }
+.erro-divida {
+  margin: 10px 0 0; font-size: 15.5px; color: var(--clay);
+  border-left: 2px solid var(--clay); padding-left: 10px;
+}
+
+.bloco-renda {
+  margin-top: 28px;
+  border-top: 1px solid var(--rule);
+  padding-top: 20px;
+}
+.bloco-renda legend { display: none; }
+.bloco-renda > .label { display: block; margin-bottom: 14px; }
+.campos-renda { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 20px; }
+
+/* ---------- botões ---------- */
+
+.botao {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px; font-weight: 600; letter-spacing: -0.005em;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 9px 16px;
+  cursor: pointer;
+}
+.botao:hover { background: var(--ink); color: var(--paper); }
+
+.botao-forte {
+  background: var(--accent); border-color: var(--accent); color: #FFFFFF;
+  font-size: 16px; padding: 12px 24px;
+}
+:root:not([data-theme="light"]) .botao-forte { color: #0D110F; }
+@media (prefers-color-scheme: light) { .botao-forte { color: #FFFFFF; } }
+.botao-forte:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+.botao-fino { border-color: var(--rule); color: var(--ink-soft); font-weight: 600; }
+.botao-fino:hover { background: var(--rule-soft); color: var(--ink); }
+
+.acoes-lista { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
+.acoes-conta {
+  display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+  margin-top: 28px; border-top: 1px solid var(--rule); padding-top: 22px;
+}
+
+/* ---------- resultado ---------- */
+
+/* As bordas ficam nos itens, não num fundo cinza atrás da grade: com três
+   itens em duas colunas sobraria uma célula pintada de cinza, sem nada. */
+.placar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+  margin: 4px 0 26px;
+}
+.placar-item {
+  padding: 14px 16px;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.placar-item .label { display: block; margin-bottom: 4px; }
+.placar-valor {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 23px; font-weight: 600; letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums; line-height: 1.2;
+}
+.placar-nota { font-size: 14px; color: var(--muted); line-height: 1.4; margin-top: 3px; }
+
+.aviso {
+  border-left: 3px solid var(--clay);
+  background: var(--clay-sunk);
+  padding: 16px 18px;
+  margin: 0 0 22px;
+}
+.aviso .label { display: block; color: var(--clay); margin-bottom: 6px; }
+.aviso p { margin: 0 0 10px; font-size: 16px; line-height: 1.55; }
+.aviso p:last-child { margin-bottom: 0; }
+
+.nota-boa {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-sunk);
+  padding: 16px 18px;
+  margin: 0 0 22px;
+}
+.nota-boa .label { display: block; color: var(--accent); margin-bottom: 6px; }
+.nota-boa p { margin: 0 0 10px; font-size: 16px; line-height: 1.55; }
+.nota-boa p:last-child { margin-bottom: 0; }
+
+.tabela-rolagem { overflow-x: auto; margin: 0 0 8px; }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 15.5px;
+}
+table th, table td {
+  text-align: right;
+  padding: 10px 10px;
+  border-bottom: 1px solid var(--rule-soft);
+  white-space: nowrap;
+}
+table th:first-child, table td:first-child { text-align: left; white-space: normal; min-width: 11ch; }
+table thead th {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--muted);
+  border-bottom: 1px solid var(--rule);
+  vertical-align: bottom;
+}
+table tbody tr:last-child td { border-bottom: 1px solid var(--rule); }
+td .ordem-n {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px; font-weight: 700; color: var(--accent);
+  display: inline-block; min-width: 2.2ch;
+}
+.legenda-tabela { font-size: 14.5px; color: var(--muted); margin: 6px 0 26px; }
+
+/* Só aparece onde a tabela realmente não cabe. */
+.dica-rolagem { display: none; font-size: 14px; color: var(--muted); margin: 8px 0 0; }
+
+.canais { margin: 22px 0 0; }
+.canais dt {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600; font-size: 16.5px; margin-top: 18px;
+}
+.canais dd { margin: 4px 0 0; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
+
+/* ---------- rodapé ---------- */
+
+footer {
+  margin-top: 48px;
+  border-top: 2px solid var(--ink);
+  padding-top: 20px;
+  display: flex; flex-wrap: wrap; gap: 18px 28px;
+  align-items: flex-start; justify-content: space-between;
+}
+footer .dominio {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600; font-size: 15px;
+}
+footer .dominio a { text-decoration: none; color: var(--ink); }
+footer .nota { font-size: 14.5px; color: var(--muted); max-width: 42ch; margin: 6px 0 0; }
+.rodape-links { text-align: right; }
+.rodape-links .nota { margin-left: auto; }
+
+/* ---------- telas estreitas ---------- */
+
+@media (max-width: 760px) {
+  section {
+    grid-template-columns: 1fr;
+    row-gap: 12px;
+    padding-block: 36px;
+    margin-top: 36px;
+  }
+  section > .label { padding-top: 0; }
+  .sheet { padding-inline: 16px; padding-block: 36px 56px; }
+  .dados { grid-template-columns: 1fr; }
+  .dados dt { border-bottom: 0; padding: 12px 0 0; }
+  .dados dd { grid-column: 1; padding-top: 2px; padding-bottom: 12px; }
+  .divida-campos, .campos-renda { grid-template-columns: 1fr; }
+  .rodape-links { text-align: left; }
+  .rodape-links .nota { margin-left: 0; }
+  ol.passos > li { grid-template-columns: 28px 1fr; column-gap: 12px; }
+  .dica-rolagem { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ---------- impressão ---------- */
+
+@media print {
+  :root {
+    --paper: #FFFFFF; --paper-sunk: #FFFFFF; --ink: #000000;
+    --ink-soft: #222222; --muted: #555555; --rule: #999999;
+    --rule-soft: #CCCCCC; --accent: #1A4A38; --accent-sunk: #FFFFFF;
+    --clay: #7A3F22; --clay-sunk: #FFFFFF; --campo-bg: #FFFFFF;
+  }
+  body { font-size: 11.5pt; background: #FFFFFF; }
+  .sheet { max-width: none; padding: 0; }
+  /* Sem break-inside nas seções: elas são longas e empurrariam páginas
+     quase vazias. Protegemos só os blocos que não podem ser cortados. */
+  section { margin-top: 14pt; padding-block: 10pt; border-top: 0; }
+  header.ficha { padding-bottom: 0; }
+  .placar, .aviso, .nota-boa, .ressalva, table tr { break-inside: avoid; }
+  .corpo > h2, .corpo h3 { break-after: avoid; }
+  /* O que se imprime é o documento que a pessoa leva ao Procon, à Defensoria
+     ou à conversa com o credor: o retrato e para onde ir. O formulário e o
+     guia do Registrato só fazem sentido na tela. */
+  #passo-1, #passo-2, .privacidade, .acoes-lista, .acoes-conta,
+  .divida-remover, .descobrir-juros, #imprimir, .botao,
+  .dica-rolagem { display: none !important; }
+  #resultado { break-before: auto; }
+  a { color: #000000; text-decoration: underline; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555555; }
+  .placar { border-color: #999999; }
+  .tabela-rolagem { overflow: visible; }
+}
