@@ -39,9 +39,10 @@ acreditada (regra 03). O que dá para verificar lendo o código:
   ferramenta vai ser usada.
 - **Nenhuma requisição externa.** Sem Google Fonts, sem CDN, sem medição de
   audiência. As fontes estão em `fonts/`, servidas pelo próprio domínio.
-- O `_headers` traz uma política `default-src 'none'` que faz o navegador
-  bloquear qualquer chamada externa **mesmo que alguém adicione uma sem querer
-  no futuro**.
+- O `src/worker.js` manda em toda resposta uma política de segurança que
+  começa em `default-src 'none'`. Na prática o navegador bloqueia qualquer
+  chamada externa **mesmo que alguém adicione uma sem querer no futuro** — e
+  os testes conferem que essa política continua saindo fechada.
 
 Conferir na prática: abra o log de rede do navegador (F12 > Network), recarregue
 e use a página inteira. Só devem aparecer os arquivos deste repositório.
@@ -56,10 +57,11 @@ index.html          a página
 calculadora.css     estilo, com as fontes e a versão de impressão
 calculadora.js      a tela: lê campos, chama a conta, escreve o resultado
 calculo.js          a conta: funções puras, sem tela e sem rede
-teste/              testes da conta
-_headers            cabeçalhos HTTP do Cloudflare Pages
-publicacao/         o Worker que serve esta página em souproximo.org/dividas
+src/worker.js       serve a página em /dividas e aplica os cabeçalhos
+teste/              testes da conta e do Worker
 fonts/              10 arquivos .woff2 + as duas licenças SIL OFL
+wrangler.jsonc      configuração do deploy na Cloudflare
+.assetsignore       o que fica no repositório mas não vai para o ar
 ```
 
 A separação entre `calculo.js` e `calculadora.js` é o ponto central do desenho:
@@ -84,11 +86,17 @@ Sem dependência nenhuma: usa o test runner que já vem no Node 18+.
 node --test
 ```
 
-Os testes cobrem a leitura de números escritos como brasileiro escreve
-(`1.234,56`), o cálculo da taxa implícita, a simulação mês a mês conferida
-contra a tabela Price, e as três situações que a ferramenta precisa reconhecer:
-parcela que não cobre nem os juros, dinheiro que não cobre nem as parcelas, e
-dívida que não fecha nunca.
+São 31 testes, em dois arquivos:
+
+- `teste/calculo.test.mjs` cobre a leitura de números escritos como brasileiro
+  escreve (`1.234,56`), o cálculo da taxa implícita, a simulação mês a mês
+  conferida contra a tabela Price, e as três situações que a ferramenta
+  precisa reconhecer: parcela que não cobre nem os juros, dinheiro que não
+  cobre nem as parcelas, e dívida que não fecha nunca.
+- `teste/worker.test.mjs` cobre o que o Worker faz: o corte do prefixo
+  `/dividas`, os caminhos relativos resolvendo debaixo dele, e os cabeçalhos
+  de segurança saindo em toda resposta. O binding de arquivos da Cloudflare é
+  simulado com o disco.
 
 ## O que envelhece aqui (regra 05)
 
@@ -123,21 +131,23 @@ oficial em vez de copiar a tela dela.
 
 ## Publicação
 
-Projeto próprio no **Cloudflare Pages**, ligado direto a este repositório:
+Um **Worker da Cloudflare com arquivos estáticos**, ligado direto a este
+repositório. Todo `git push` na `main` publica sozinho.
 
-| Campo | Valor |
-|---|---|
-| Framework preset | None |
-| Build command | *(vazio)* |
-| Build output directory | `/` |
+O endereço público é `souproximo.org/dividas`. A rota está no
+`wrangler.jsonc`: rota com caminho é mais específica que o domínio do site e
+por isso roda antes dele, o que faz dois Workers conviverem no mesmo endereço.
+Não existe endereço `.workers.dev` — a ferramenta tem um endereço só.
 
-O endereço público é `souproximo.org/dividas`, servido pelo Worker em
-`publicacao/worker-dividas.js` — as instruções de instalação estão dentro do
-próprio arquivo. O visitante nunca vê o endereço `.pages.dev`.
+**Ordem no primeiro deploy:** o Worker do site
+([souproximo.org](https://github.com/souproximo/souproximo.org)) precisa já
+estar com o domínio ligado. Sem isso a rota não tem onde se pendurar e o
+deploy falha dizendo que a zona não foi encontrada.
 
 Todos os caminhos de arquivo na página são **relativos** (`./calculadora.css`),
-justamente para a página funcionar tanto na raiz de um domínio quanto dentro de
-`/dividas/`.
+e o Worker corta o `/dividas` do começo do caminho antes de procurar o arquivo.
+É o que permite a mesma página funcionar montada num caminho e solta na raiz —
+inclusive no `npx wrangler dev`, que serve na raiz.
 
 ## Como contribuir
 

@@ -48,6 +48,10 @@ Estão em <https://souproximo.org>. Três delas pegam direto neste código:
   — use `textContent` e os ajudantes que já estão lá.
 - **`index.html` e `calculadora.css`** são o conteúdo e a aparência. O CSS
   precisa continuar funcionando no tema claro, no tema escuro e na impressão.
+- **`src/worker.js` é o servidor.** Ele corta o `/dividas` do caminho e aplica
+  os cabeçalhos de segurança. A política de segurança que sai dali é parte do
+  que esta página promete a quem usa: afrouxá-la exige justificativa, e os
+  testes de `teste/worker.test.mjs` existem para travar isso.
 
 ## Estilo
 

@@ -1,0 +1,31 @@
+// Configuração do deploy na Cloudflare (Workers com arquivos estáticos).
+//
+// A rota abaixo faz esta calculadora atender em souproximo.org/dividas sem
+// que o visitante saia do domínio. Rota com caminho é mais específica que o
+// domínio do site, e por isso roda antes dele — é assim que dois Workers
+// convivem no mesmo endereço.
+//
+// Ordem importa no primeiro deploy: o site (souproximo-org) precisa já estar
+// com o domínio souproximo.org ligado, senão esta rota não tem onde se
+// pendurar e o deploy falha dizendo que a zona não foi encontrada.
+{
+  "name": "calculadora-dividas",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-09-21",
+
+  // Sem endereço .workers.dev: o endereço público é souproximo.org/dividas,
+  // e um segundo endereço só serviria para confundir e ser indexado.
+  "workers_dev": false,
+
+  "routes": [
+    { "pattern": "souproximo.org/dividas*", "zone_name": "souproximo.org" }
+  ],
+
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    // O script roda antes de procurar arquivo, porque é ele quem tira o
+    // "/dividas" do caminho e aplica os cabeçalhos de segurança.
+    "run_worker_first": true
+  }
+}

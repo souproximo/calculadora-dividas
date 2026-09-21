@@ -6,3 +6,6 @@ Thumbs.db
 .idea/
 .vscode/
 *.log
+
+# Pasta temporária do wrangler
+.wrangler/

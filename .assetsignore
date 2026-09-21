@@ -1,0 +1,22 @@
+# O que fica no repositório mas não vai para o ar.
+#
+# Tudo que não estiver listado aqui é publicado e fica acessível por URL.
+# Ao adicionar arquivo novo que não seja parte da página, lembre de listá-lo.
+
+.git/
+.gitignore
+.assetsignore
+wrangler.jsonc
+# Pasta temporária que o próprio wrangler cria ao rodar.
+.wrangler/
+
+README.md
+CONTRIBUTING.md
+LICENSE
+
+# O código do Worker é servido pela Cloudflare como programa, não como
+# arquivo para baixar. Quem quiser lê no repositório.
+src/
+
+# Os testes rodam na máquina de quem mantém.
+teste/
