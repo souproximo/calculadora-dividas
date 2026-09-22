@@ -272,7 +272,7 @@ ol.passos > li::before {
   font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
   font-weight: 600; font-size: 16.5px; line-height: 1.35; margin: 0 0 4px;
 }
-.passo-d { margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
+.passo-d { grid-column: 2; margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
 
 .ressalva {
   margin-top: 28px;
