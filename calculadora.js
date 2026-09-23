@@ -312,7 +312,7 @@ function calcular(evento) {
       'O valor separado não cobre as parcelas',
       `As parcelas somam ${emReais(r.parcelasNoMes)} por mês e você informou ${emReais(disponivel)}. ` +
       `Faltam ${emReais(porJuros.faltaPorMes)} todo mês.`,
-      'Nesse caso não adianta escolher ordem de pagamento: nenhuma ordem faz o dinheiro dar conta. O caminho é renegociar o valor das parcelas, e isso se faz no Procon, na Defensoria ou direto com o credor, por escrito.',
+      'Nesse caso não adianta escolher ordem de pagamento: nenhuma ordem faz o dinheiro dar conta. O caminho é renegociar o valor das parcelas, e isso se faz no Procon, na Defensoria ou direto com quem você deve, por escrito.',
     ));
   }
 
@@ -372,7 +372,7 @@ function calcular(evento) {
       // parcela não cobre nem os juros. Não repetimos.
       if (r.parcelaCobreJuros) {
         paragrafos.push(
-          'Um caso assim se resolve renegociando, não apertando mais o orçamento. Procure o Procon ou a Defensoria Pública, que podem chamar todos os credores de uma vez, ou fale direto com o credor por escrito, guardando o número do protocolo.',
+          'Um caso assim se resolve renegociando, não apertando mais o orçamento. Procure o Procon ou a Defensoria Pública, que podem chamar de uma vez todo mundo a quem você deve, ou fale direto com quem você deve, por escrito, guardando o número do protocolo.',
         );
       }
       saida.append(bloco('aviso', 'Com esse valor por mês, a dívida não acaba', ...paragrafos));
@@ -416,7 +416,7 @@ function calcular(evento) {
     'Ela também não sabe o que você deve fora de banco e financeira: carnê de loja, conta de luz, aluguel, escola, plano de saúde. Se essas ficaram de fora, o retrato está menor do que a realidade.',
   ));
   ressalva.append(el('p', null,
-    'Use este resultado como o retrato que você leva para o Procon, para a Defensoria ou para a conversa com o credor. Ele não substitui nenhum dos três.',
+    'Use este resultado como o retrato que você leva para o Procon, para a Defensoria ou para a conversa com quem você deve. Ele não substitui nenhum dos três.',
   ));
   saida.append(ressalva);
 
