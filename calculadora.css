@@ -305,6 +305,15 @@ legend { padding: 0; }
   gap: 4px 20px;
 }
 .campo-nome { grid-column: 1 / -1; }
+.campo-cartao { grid-column: 1 / -1; }
+.campo-cartao label {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 15px; cursor: pointer;
+}
+input[type="checkbox"] {
+  width: 22px; height: 22px; margin: 0; flex: none;
+  accent-color: var(--accent);
+}
 
 .campo { margin: 0 0 12px; display: flex; flex-direction: column; gap: 3px; }
 .campo-estreito { max-width: 220px; }

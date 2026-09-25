@@ -21,6 +21,7 @@ import {
   saldoDepoisDe,
   situacaoMinimoExistencial,
   MINIMO_EXISTENCIAL,
+  TETO_CARTAO_CONFERIDO_EM,
 } from './calculo.js';
 
 /* ------------------------------------------------------------------ *
@@ -84,6 +85,7 @@ function adicionarDivida(valores = null) {
     $('.f-saldo', no).value = valores.saldo ?? '';
     $('.f-parcela', no).value = valores.parcela ?? '';
     $('.f-juros', no).value = valores.juros ?? '';
+    $('.f-cartao', no).checked = valores.cartao === true;
   }
 
   lista.append(no);
@@ -197,6 +199,7 @@ function lerFormulario() {
       saldo,
       taxa,
       minimo: parcela,
+      cartao: $('.f-cartao', no).checked,
     });
   });
 
@@ -316,6 +319,24 @@ function calcular(evento) {
     ));
   }
 
+  // O teto de juros do cartão é aproximado (ver aplicarTetoCartao): ele entra
+  // na projeção de um ano e numa nota da comparação, nunca no plano nem na
+  // ordem de pagamento.
+  const temCartao = dividas.some((d) => d.cartao);
+  const COM_TETO = { tetoCartao: true };
+
+  if (temCartao) {
+    saida.append(bloco(
+      'boa',
+      'Dívida de cartão tem limite de juros',
+      'Desde 2024, os juros da fatura que não foi paga inteira e da fatura parcelada não podem passar do valor da dívida. ' +
+      'Uma dívida de R$ 1.000 no cartão pode chegar a R$ 2.000 com os juros, não mais que isso.',
+      'A fatura é obrigada a mostrar quanto a dívida era no começo e quanto já foi cobrado de juros. ' +
+      'Se os juros da sua já passaram desse valor, leve as faturas ao Procon ou à Defensoria.',
+      notaRodape(`Lei 14.690/2023, art. 28, e Resolução CMN 5.112/2023. Conferido em ${emData(TETO_CARTAO_CONFERIDO_EM)}.`),
+    ));
+  }
+
   /* ---------- ordem de pagamento ---------- */
 
   if (porJuros.viavel) {
@@ -362,12 +383,27 @@ function calcular(evento) {
     } else {
       // Projetar cinquenta anos devolveria um número astronômico, que não
       // ajuda ninguém a entender nada. Um ano já conta a história.
-      const em12 = saldoDepoisDe(dividas, disponivel, ordemJuros, 12);
+      // Aqui o teto do cartão entra: sem ele, a projeção mostraria um número
+      // maior do que a lei permite cobrar, justo no aviso que mais assusta.
+      const em12 = saldoDepoisDe(dividas, disponivel, ordemJuros, 12, COM_TETO);
+      const noTeto = simularQuitacao(dividas, disponivel, ordemJuros, 12, COM_TETO).noTeto;
+      // Com o teto, a projeção pode até cair. Aí a frase não pode dizer que
+      // a dívida cresce, e precisa dizer que a queda depende do limite.
       const paragrafos = [
-        `Pagando ${emReais(disponivel)} todo mês, a dívida não diminui: ela cresce. ` +
-        `Hoje ela está em ${emReais(r.totalDevido)}; daqui a um ano, mantidas as mesmas condições, estaria perto de ${emReais(em12)}.`,
-        'Isso não é conta errada nem falta de esforço seu — é uma dívida que não tem como ser paga desse jeito, e reconhecer isso é o começo da saída.',
+        em12 > r.totalDevido
+          ? `Pagando ${emReais(disponivel)} todo mês, a dívida não diminui: ela cresce. ` +
+            `Hoje ela está em ${emReais(r.totalDevido)}; daqui a um ano, mantidas as mesmas condições, estaria perto de ${emReais(em12)}.`
+          : `Pagando ${emReais(disponivel)} todo mês, a parcela não dá conta dos juros, e sem o limite de juros do cartão a dívida só cresceria. ` +
+            `Hoje a dívida está em ${emReais(r.totalDevido)}; se o banco aplicar o limite, daqui a um ano estaria perto de ${emReais(em12)}.`,
       ];
+      if (noTeto.length) {
+        paragrafos.push(noTeto.length === 1
+          ? 'Nesta conta, a dívida do cartão parou de crescer no limite que a lei permite.'
+          : 'Nesta conta, as dívidas do cartão pararam de crescer no limite que a lei permite.');
+      }
+      paragrafos.push(
+        'Isso não é conta errada nem falta de esforço seu — é uma dívida que não tem como ser paga desse jeito, e reconhecer isso é o começo da saída.',
+      );
       // O encaminhamento ao Procon já apareceu no aviso de cima quando a
       // parcela não cobre nem os juros. Não repetimos.
       if (r.parcelaCobreJuros) {
@@ -400,6 +436,22 @@ function calcular(evento) {
           'Nesse caso, escolha a que você acha que vai conseguir sustentar até o fim.',
         );
       }
+
+      // A ordem não muda por causa do teto, que é aproximado e que o banco
+      // pode não aplicar. Mas se, com o teto, começar pela menor sai mais
+      // barato, a pessoa precisa ver esse número para decidir.
+      if (temCartao) {
+        const tetoJuros = simularQuitacao(dividas, disponivel, ordemJuros, 600, COM_TETO);
+        const tetoSaldo = simularQuitacao(dividas, disponivel, ordemPorSaldo(dividas), 600, COM_TETO);
+        const economia = tetoJuros.totalJuros - tetoSaldo.totalJuros;
+        if (tetoJuros.fecha && tetoSaldo.fecha && economia > 1) {
+          corpoComp.push(
+            'Essa conta não usa o limite de juros do cartão. Se o banco aplicar o limite, começar pela menor pode sair ' +
+            `${emReais(economia)} mais barato, porque os juros do cartão param de crescer de qualquer jeito. ` +
+            'Para saber se o limite vale para a sua dívida, confira na fatura ou pergunte no Procon.',
+          );
+        }
+      }
       saida.append(bloco('boa', 'E se eu preferir quitar a menor primeiro?', ...corpoComp));
     }
   }
@@ -415,6 +467,12 @@ function calcular(evento) {
   ressalva.append(el('p', null,
     'Ela também não sabe o que você deve fora de banco e financeira: carnê de loja, conta de luz, aluguel, escola, plano de saúde. Se essas ficaram de fora, o retrato está menor do que a realidade.',
   ));
+  if (temCartao) {
+    ressalva.append(el('p', null,
+      'Na dívida de cartão, o prazo e os juros do plano são calculados sem o limite de juros, porque a página não sabe quanto a dívida era no começo. ' +
+      'Se o limite valer para a sua dívida, o prazo e os juros podem ser menores.',
+    ));
+  }
   ressalva.append(el('p', null,
     'Use este resultado como o retrato que você leva para o Procon, para a Defensoria ou para a conversa com quem você deve. Ele não substitui nenhum dos três.',
   ));
@@ -423,6 +481,12 @@ function calcular(evento) {
   corpoResultado.replaceChildren(saida);
   secaoResultado.hidden = false;
   secaoResultado.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/** '2026-09-25' -> '25/09/2026' */
+function emData(iso) {
+  const [ano, mes, dia] = iso.split('-');
+  return `${dia}/${mes}/${ano}`;
 }
 
 function notaRodape(texto) {
@@ -498,11 +562,11 @@ $('#limpar').addEventListener('click', () => {
 
 $('#exemplo').addEventListener('click', () => {
   lista.replaceChildren();
-  adicionarDivida({ nome: 'Cartão de crédito', saldo: '3.000', parcela: '450', juros: '13,5' });
+  adicionarDivida({ nome: 'Cartão de crédito', saldo: '3.000', parcela: '450', juros: '13,5', cartao: true });
   adicionarDivida({ nome: 'Cheque especial', saldo: '1.200', parcela: '150', juros: '8' });
   adicionarDivida({ nome: 'Consignado', saldo: '8.000', parcela: '380', juros: '1,8' });
   $('#renda').value = '3.000';
-  $('#disponivel').value = '1.200';
+  $('#disponivel').value = '1.000';
 });
 
 $('#imprimir').addEventListener('click', () => window.print());
