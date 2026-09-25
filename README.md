@@ -86,13 +86,14 @@ Sem dependência nenhuma: usa o test runner que já vem no Node 18+.
 node --test
 ```
 
-São 31 testes, em dois arquivos:
+São 40 testes, em dois arquivos:
 
 - `teste/calculo.test.mjs` cobre a leitura de números escritos como brasileiro
   escreve (`1.234,56`), o cálculo da taxa implícita, a simulação mês a mês
   conferida contra a tabela Price, e as três situações que a ferramenta
   precisa reconhecer: parcela que não cobre nem os juros, dinheiro que não
-  cobre nem as parcelas, e dívida que não fecha nunca.
+  cobre nem as parcelas, e dívida que não fecha nunca. Também trava o limite
+  de juros do cartão e os casos A e B do plano de validação.
 - `teste/worker.test.mjs` cobre o que o Worker faz: o corte do prefixo
   `/dividas`, os caminhos relativos resolvendo debaixo dele, e os cabeçalhos
   de segurança saindo em toda resposta. O binding de arquivos da Cloudflare é
