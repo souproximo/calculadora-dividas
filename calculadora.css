@@ -282,6 +282,7 @@ ol.passos > li::before {
 .ressalva .label { color: var(--clay); display: block; margin-bottom: 8px; }
 .ressalva p { margin: 0 0 12px; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
 .ressalva p:last-child { margin-bottom: 0; }
+#resultado .contato { margin: 28px 0 0; color: var(--muted); }
 
 /* ---------- formulário ---------- */
 
@@ -572,10 +573,11 @@ footer .nota { font-size: 14.5px; color: var(--muted); max-width: 42ch; margin: 
   .corpo > h2, .corpo h3 { break-after: avoid; }
   /* O que se imprime é o documento que a pessoa leva ao Procon, à Defensoria
      ou à conversa com o credor: o retrato e para onde ir. O formulário e o
-     guia do Registrato só fazem sentido na tela. */
+     guia do Registrato só fazem sentido na tela. As linhas de contato são
+     do projeto, não da pessoa, e também ficam de fora. */
   #passo-1, #passo-2, .privacidade, .acoes-lista, .acoes-conta,
   .divida-remover, .descobrir-juros, #imprimir, .botao, .compartilhar,
-  .dica-rolagem { display: none !important; }
+  .dica-rolagem, .contato { display: none !important; }
   #resultado { break-before: auto; }
   a { color: #000000; text-decoration: underline; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #555555; }

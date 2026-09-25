@@ -3,7 +3,9 @@
 Obrigado por olhar. Esta ferramenta aceita ajuda de qualquer pessoa, sem
 precisar concordar com a motivação do projeto — só com as regras abaixo.
 
-Contato: **contato@souproximo.org** · issues e pull requests também funcionam.
+Contato: **contato@souproximo.org** · pull requests também funcionam. As
+issues ficam desligadas de propósito: é fácil alguém colar a própria dívida
+numa página pública.
 
 ## As três linhas vermelhas
 

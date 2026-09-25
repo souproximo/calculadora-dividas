@@ -32,6 +32,9 @@ import {
 const $ = (sel, raiz = document) => raiz.querySelector(sel);
 const $$ = (sel, raiz = document) => [...raiz.querySelectorAll(sel)];
 
+// Mesmo endereço do rodapé do index.html. Só assunto fixo, nunca body=.
+const CONTATO = 'mailto:contato@souproximo.org?subject=Calculadora%20de%20d%C3%ADvidas';
+
 /** Cria um elemento já com classe e texto. Nunca usamos innerHTML com
  *  coisa digitada pela pessoa. */
 function el(tag, classe, texto) {
@@ -478,6 +481,14 @@ function calcular(evento) {
     'Use este resultado como o retrato que você leva para o Procon, para a Defensoria ou para a conversa com quem você deve. Ele não substitui nenhum dos três.',
   ));
   saida.append(ressalva);
+
+  // Contato para avisar de erro. O mailto leva só um assunto fixo: nada do
+  // que a pessoa digitou nem do resultado vai junto. Não sai na impressão.
+  const contato = el('p', 'fina contato', 'Achou algo errado ou difícil nesta página? Escreva para ');
+  const email = el('a', null, 'contato@souproximo.org');
+  email.href = CONTATO;
+  contato.append(email, '. Não precisa mandar os números das suas dívidas: conte só o que aconteceu.');
+  saida.append(contato);
 
   corpoResultado.replaceChildren(saida);
   secaoResultado.hidden = false;

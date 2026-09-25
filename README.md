@@ -86,7 +86,7 @@ Sem dependência nenhuma: usa o test runner que já vem no Node 18+.
 node --test
 ```
 
-São 45 testes, em quatro arquivos:
+São 48 testes, em cinco arquivos:
 
 - `teste/calculo.test.mjs` cobre a leitura de números escritos como brasileiro
   escreve (`1.234,56`), o cálculo da taxa implícita, a simulação mês a mês
@@ -102,6 +102,8 @@ São 45 testes, em quatro arquivos:
   enviado pelo navegador se o script não carregar: nenhum campo tem `name`,
   não há `action` nem `method`, e o botão "Fazer a conta" nasce desabilitado
   e só é ligado pelo `calculadora.js`.
+- `teste/contato.test.mjs` garante que o contato é só `mailto:`, sem `body=`,
+  e que as linhas de contato não saem na impressão.
 - `teste/conferido.test.mjs` garante que a data de verificação é a mesma em
   todos os lugares onde aparece.
 
