@@ -45,7 +45,7 @@ Se a mudança pedida esbarra numa delas, diga isso em vez de contornar.
 node --test
 ```
 
-31 testes, sem instalar nada. Rode antes de entregar. Mexeu em fórmula ou em
+40 testes, sem instalar nada. Rode antes de entregar. Mexeu em fórmula ou em
 cabeçalho, escreva teste junto — é o que impede a próxima mudança de desfazer
 esta sem ninguém perceber.
 
@@ -84,6 +84,7 @@ negocia, não aconselha juridicamente, não diz o que a pessoa deve contratar.
 | Passo a passo do Registrato | `index.html`, seção Passo 1 | o serviço já mudou de lugar uma vez |
 | Nível exigido da conta gov.br | `index.html`, Passo 1 | |
 | Canais oficiais citados | `index.html`, "Onde pedir ajuda" | |
+| Limite de juros do cartão (juros até 100% do valor original) | `calculo.js` → `TETO_CARTAO_CONFERIDO_EM`; aviso em `calculadora.js` | Lei 14.690/2023, art. 28, e Resolução CMN 5.112/2023. Data própria, conferida em 25/09/2026: mudar a constante e o aviso sai junto |
 | A data em si | selo do cabeçalho, nota do rodapé, `MINIMO_EXISTENCIAL_CONFERIDO_EM`, aviso do mínimo existencial em `calculadora.js` | mudar os quatro juntos |
 
 Campanhas de renegociação com prazo curto (tipo Desenrola) ficaram de fora de

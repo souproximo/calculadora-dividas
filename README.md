@@ -110,6 +110,7 @@ reconferir. A lista completa do que muda:
 | Nível exigido da **conta gov.br** | `index.html` → Passo 1 | <https://www.gov.br/governodigital/pt-br/conta-gov-br> |
 | Nomes dos **relatórios** do Meu BC | `index.html` → Passo 1 | a própria tela do Meu BC |
 | **Canais oficiais** citados | `index.html` → seção “Onde pedir ajuda” | Procon, Defensoria, consumidor.gov.br, CRAS |
+| **Limite de juros do cartão** (juros e encargos até 100% do valor original) | `calculo.js` → `TETO_CARTAO_CONFERIDO_EM`, aviso em `calculadora.js` | Lei 14.690/2023, art. 28 (planalto.gov.br), e Resolução CMN 5.112/2023 (bcb.gov.br). Tem data própria, mostrada no aviso |
 | **Data de verificação** | `index.html` (selo do cabeçalho, nota do rodapé), `calculo.js` (`MINIMO_EXISTENCIAL_CONFERIDO_EM`) e o aviso do mínimo existencial em `calculadora.js` | mudar os quatro juntos |
 
 Campanhas de renegociação com desconto (tipo Desenrola) **não são citadas nesta
