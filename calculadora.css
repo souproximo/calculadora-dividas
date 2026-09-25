@@ -500,6 +500,11 @@ footer .dominio {
 }
 footer .dominio a { text-decoration: none; color: var(--ink); }
 footer .nota { font-size: 14.5px; color: var(--muted); max-width: 42ch; margin: 6px 0 0; }
+.compartilhar { flex-basis: 100%; order: -1; }
+.compartilhar .nota { margin-top: 0; }
+.compartilhar-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 0; }
+.compartilhar-acoes a.botao { text-decoration: none; display: inline-block; }
+#compartilhar-aviso:empty { display: none; }
 .rodape-links { text-align: right; }
 .rodape-links .nota { margin-left: auto; }
 
@@ -549,7 +554,7 @@ footer .nota { font-size: 14.5px; color: var(--muted); max-width: 42ch; margin: 
      ou à conversa com o credor: o retrato e para onde ir. O formulário e o
      guia do Registrato só fazem sentido na tela. */
   #passo-1, #passo-2, .privacidade, .acoes-lista, .acoes-conta,
-  .divida-remover, .descobrir-juros, #imprimir, .botao,
+  .divida-remover, .descobrir-juros, #imprimir, .botao, .compartilhar,
   .dica-rolagem { display: none !important; }
   #resultado { break-before: auto; }
   a { color: #000000; text-decoration: underline; }

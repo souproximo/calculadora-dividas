@@ -507,4 +507,40 @@ $('#exemplo').addEventListener('click', () => {
 
 $('#imprimir').addEventListener('click', () => window.print());
 
+/* ------------------------------------------------------------------ *
+ * Compartilhar
+ *
+ * Só o endereço fixo da página é compartilhado — nunca location.href e
+ * nunca nada do formulário. Quem decide mandar e para quem é a pessoa, pela
+ * janela de compartilhar do próprio aparelho; esta página não fala com rede
+ * social nenhuma.
+ * ------------------------------------------------------------------ */
+
+const ENDERECO = 'https://souproximo.org/dividas/';
+const CHAMADA =
+  'Calculadora gratuita de dívidas: soma o que se deve e mostra em que ordem ' +
+  'pagar. A conta é feita no próprio celular e nada sai dele.';
+
+$('#compartilhar').addEventListener('click', async () => {
+  const aviso = $('#compartilhar-aviso');
+  aviso.textContent = '';
+
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: 'Calculadora de dívidas', text: CHAMADA, url: ENDERECO });
+      return;
+    } catch (erro) {
+      // A pessoa fechou a janela de compartilhar: não é erro, não diz nada.
+      if (erro.name === 'AbortError') return;
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(ENDERECO);
+    aviso.textContent = 'Link copiado. É só colar na conversa.';
+  } catch {
+    aviso.textContent = 'Copie este endereço: ' + ENDERECO;
+  }
+});
+
 adicionarDivida();
