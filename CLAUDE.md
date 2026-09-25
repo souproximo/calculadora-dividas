@@ -106,6 +106,10 @@ python3 -m http.server 8000     # a página usa módulos; file:// não funciona
 `git push` na `main` publica em `souproximo.org/dividas` em menos de um
 minuto. Não há ambiente de teste. Commite pensando nisso.
 
+**Não crie branch.** Enquanto só uma pessoa mexe no código, tudo é feito
+direto na `main`. Isso muda quando entrar mais alguém contribuindo — até lá,
+nada de branch nova, nem para mudança grande.
+
 O `.assetsignore` decide o que vai para o ar: **arquivo novo é publicado por
 padrão**. Criou algo que não é parte da página, liste lá.
 
