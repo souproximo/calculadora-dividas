@@ -155,6 +155,35 @@ export function taxaImplicita(saldo, parcela, nParcelas) {
 }
 
 /* ------------------------------------------------------------------ *
+ * Teto de juros do cartão de crédito
+ * ------------------------------------------------------------------ */
+
+/**
+ * Lei 14.690/2023, art. 28, § 1º, regulamentada pela Resolução CMN
+ * 5.112/2023: no financiamento da fatura do cartão (o que sobra quando a
+ * fatura não é paga inteira, e o parcelamento da fatura), o total cobrado de
+ * juros e encargos não pode passar do valor original da dívida. Vale para
+ * operações feitas a partir de janeiro de 2024. Conferido em 25/09/2026.
+ *
+ * A lei fala do valor ORIGINAL. A calculadora só conhece o saldo de hoje,
+ * então usa o saldo informado como teto dos juros daqui em diante. Não é o
+ * teto exato de ninguém: se já foram cobrados muitos juros, o teto real é
+ * mais baixo; se a pessoa já pagou bastante, pode ser um pouco mais alto. Por
+ * isso a tela manda conferir na fatura, que é obrigada a mostrar o valor
+ * original e os juros já cobrados (Resolução 4.549/2017, art. 2º-B).
+ */
+export const TETO_CARTAO_CONFERIDO_EM = '2026-09-25';
+
+/**
+ * Juros do mês de uma dívida de cartão, cortados para que a soma dos juros
+ * desde hoje não passe do saldo informado.
+ */
+export function aplicarTetoCartao(jurosDoMes, jurosJaSomados, saldoInformado) {
+  const folga = Math.max(saldoInformado - jurosJaSomados, 0);
+  return Math.min(jurosDoMes, folga);
+}
+
+/* ------------------------------------------------------------------ *
  * Retrato das dívidas
  * ------------------------------------------------------------------ */
 
@@ -225,11 +254,18 @@ export function ordemPorSaldo(dividas) {
  * disponivel  quanto a pessoa consegue destinar por mês, no total
  * ordem       array de ids, prioridade para a sobra
  *
- * Devolve { viavel, fecha, meses, totalJuros, totalPago, quitacao }
+ * opcoes.tetoCartao  aplica o teto de juros às dívidas com `cartao: true`.
+ *   Fica desligado por padrão: o plano de quitação e a comparação entre as
+ *   ordens são feitos sem ele, porque o teto usado aqui é uma aproximação e
+ *   o banco pode não aplicá-lo sozinho (ver aplicarTetoCartao).
+ *
+ * Devolve { viavel, fecha, meses, totalJuros, totalPago, quitacao, noTeto }
  *   viavel = false quando o dinheiro não cobre nem as parcelas combinadas
  *   fecha  = false quando nem em 50 anos as dívidas chegam a zero
+ *   noTeto = ids das dívidas de cartão que pararam de crescer no teto
  */
-export function simularQuitacao(dividas, disponivel, ordem, limiteMeses = 600) {
+export function simularQuitacao(dividas, disponivel, ordem, limiteMeses = 600, opcoes = {}) {
+  const { tetoCartao = false } = opcoes;
   const minimos = dividas.reduce((s, d) => s + d.minimo, 0);
 
   if (!Number.isFinite(disponivel) || disponivel + CENTAVO < minimos) {
@@ -240,11 +276,16 @@ export function simularQuitacao(dividas, disponivel, ordem, limiteMeses = 600) {
       totalJuros: NaN,
       totalPago: NaN,
       quitacao: {},
+      noTeto: [],
       faltaPorMes: minimos - (Number.isFinite(disponivel) ? disponivel : 0),
     };
   }
 
-  const estado = dividas.map((d) => ({ ...d }));
+  const estado = dividas.map((d) => ({ ...d, jurosSomados: 0, saldoInformado: d.saldo }));
+  const comTeto = (d) => tetoCartao && d.cartao === true;
+  const noTeto = () => estado
+    .filter((d) => comTeto(d) && d.jurosSomados >= d.saldoInformado - CENTAVO)
+    .map((d) => d.id);
   const quitacao = Object.create(null);
   let totalJuros = 0;
   let totalPago = 0;
@@ -262,6 +303,7 @@ export function simularQuitacao(dividas, disponivel, ordem, limiteMeses = 600) {
         totalJuros,
         totalPago,
         quitacao,
+        noTeto: noTeto(),
         saldoRestante: estado.reduce((s, d) => s + Math.max(d.saldo, 0), 0),
       };
     }
@@ -269,8 +311,10 @@ export function simularQuitacao(dividas, disponivel, ordem, limiteMeses = 600) {
     // 1. os juros do mês entram no saldo
     for (const d of estado) {
       if (d.saldo <= CENTAVO) continue;
-      const j = d.saldo * d.taxa;
+      let j = d.saldo * d.taxa;
+      if (comTeto(d)) j = aplicarTetoCartao(j, d.jurosSomados, d.saldoInformado);
       d.saldo += j;
+      d.jurosSomados += j;
       totalJuros += j;
     }
 
@@ -298,7 +342,7 @@ export function simularQuitacao(dividas, disponivel, ordem, limiteMeses = 600) {
     }
   }
 
-  return { viavel: true, fecha: true, meses: mes, totalJuros, totalPago, quitacao };
+  return { viavel: true, fecha: true, meses: mes, totalJuros, totalPago, quitacao, noTeto: noTeto() };
 }
 
 /**
@@ -306,8 +350,8 @@ export function simularQuitacao(dividas, disponivel, ordem, limiteMeses = 600) {
  * Serve para dizer "daqui a um ano a dívida estaria em tanto" em vez de
  * projetar cinquenta anos e cuspir um número que não diz nada a ninguém.
  */
-export function saldoDepoisDe(dividas, disponivel, ordem, meses) {
-  const r = simularQuitacao(dividas, disponivel, ordem, meses);
+export function saldoDepoisDe(dividas, disponivel, ordem, meses, opcoes = {}) {
+  const r = simularQuitacao(dividas, disponivel, ordem, meses, opcoes);
   if (!r.viavel) return NaN;
   return r.fecha ? 0 : r.saldoRestante;
 }
@@ -315,9 +359,9 @@ export function saldoDepoisDe(dividas, disponivel, ordem, meses) {
 /**
  * Roda as duas ordens e devolve a diferença entre elas.
  */
-export function compararOrdens(dividas, disponivel) {
-  const porJuros = simularQuitacao(dividas, disponivel, ordemPorJuros(dividas));
-  const porSaldo = simularQuitacao(dividas, disponivel, ordemPorSaldo(dividas));
+export function compararOrdens(dividas, disponivel, opcoes = {}) {
+  const porJuros = simularQuitacao(dividas, disponivel, ordemPorJuros(dividas), 600, opcoes);
+  const porSaldo = simularQuitacao(dividas, disponivel, ordemPorSaldo(dividas), 600, opcoes);
 
   const diferencaJuros =
     porJuros.fecha && porSaldo.fecha ? porSaldo.totalJuros - porJuros.totalJuros : NaN;

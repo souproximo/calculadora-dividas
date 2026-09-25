@@ -19,6 +19,7 @@ import {
   compararOrdens,
   situacaoMinimoExistencial,
   MINIMO_EXISTENCIAL,
+  aplicarTetoCartao,
 } from '../calculo.js';
 
 const perto = (a, b, tolerancia = 0.01) =>
@@ -228,4 +229,132 @@ test('mínimo existencial: compara a sobra com o valor da lei', () => {
 test('mínimo existencial não é avaliado sem renda informada', () => {
   assert.equal(situacaoMinimoExistencial(NaN, 500).avaliado, false);
   assert.equal(situacaoMinimoExistencial(0, 500).avaliado, false);
+});
+
+/* ------------------------------------------------------------------ *
+ * Teto de juros do cartão (Lei 14.690/2023, art. 28)
+ * ------------------------------------------------------------------ */
+
+const COM_TETO = { tetoCartao: true };
+
+test('aplicarTetoCartao corta os juros no que falta para o teto', () => {
+  perto(aplicarTetoCartao(135, 0, 1000), 135);      // longe do teto
+  perto(aplicarTetoCartao(135, 900, 1000), 100);    // só cabem 100
+  perto(aplicarTetoCartao(135, 1000, 1000), 0);     // já bateu
+  perto(aplicarTetoCartao(135, 1200, 1000), 0);     // nunca negativo
+});
+
+test('cartão a 13,5% sem pagamento para no dobro e não passa dele', () => {
+  const cartao = [{ id: 'a', nome: 'Cartão', saldo: 1000, taxa: 0.135, minimo: 0, cartao: true }];
+  perto(saldoDepoisDe(cartao, 0, ['a'], 12, COM_TETO), 2000);
+  perto(saldoDepoisDe(cartao, 0, ['a'], 120, COM_TETO), 2000);
+
+  const r = simularQuitacao(cartao, 0, ['a'], 12, COM_TETO);
+  assert.deepEqual(r.noTeto, ['a']);
+  perto(r.totalJuros, 1000);
+});
+
+test('a mesma dívida sem a marca de cartão cresce como antes, sem teto', () => {
+  const semMarca = [{ id: 'a', nome: 'Empréstimo', saldo: 1000, taxa: 0.135, minimo: 0 }];
+  const esperado = 1000 * Math.pow(1.135, 12);
+  perto(saldoDepoisDe(semMarca, 0, ['a'], 12), esperado);
+  perto(saldoDepoisDe(semMarca, 0, ['a'], 12, COM_TETO), esperado);
+  assert.deepEqual(simularQuitacao(semMarca, 0, ['a'], 12, COM_TETO).noTeto, []);
+});
+
+test('sem pedir o teto, a marca de cartão não muda a simulação', () => {
+  // O plano de quitação e a comparação entre ordens são feitos sem teto.
+  const marcado = [{ id: 'a', nome: 'Cartão', saldo: 5000, taxa: 0.14, minimo: 100, cartao: true }];
+  const r = simularQuitacao(marcado, 100, ['a'], 120);
+  assert.equal(r.fecha, false);
+  assert.ok(r.saldoRestante > 10000);
+});
+
+test('cartão com pagamento: os juros somados não passam do saldo informado', () => {
+  const cartao = [{ id: 'a', nome: 'Cartão', saldo: 5000, taxa: 0.14, minimo: 100, cartao: true }];
+  const r = simularQuitacao(cartao, 100, ['a'], 600, COM_TETO);
+  assert.ok(r.totalJuros <= 5000 + 0.01, `juros passaram do teto: ${r.totalJuros}`);
+  perto(r.totalJuros, 5000);
+  // Um ano pagando R$ 100: chega ao teto e fica em 5.000 + 5.000 − 1.200.
+  perto(saldoDepoisDe(cartao, 100, ['a'], 12, COM_TETO), 8800);
+});
+
+test('cartão misturado com empréstimo: a ordem de pagamento não muda', () => {
+  const semMarca = exemplo();
+  const comMarca = exemplo().map((d) => (d.id === 'a' ? { ...d, cartao: true } : d));
+  assert.deepEqual(ordemPorJuros(comMarca), ordemPorJuros(semMarca));
+  assert.deepEqual(ordemPorSaldo(comMarca), ordemPorSaldo(semMarca));
+});
+
+test('com o teto, começar pela menor pode sair mais barato', () => {
+  // É por isso que o teto não entra na ordem: quando o cartão vai bater no
+  // teto de qualquer jeito, pagar ele antes não economiza juros. A tela
+  // mostra essa diferença em vez de mudar a ordem sozinha.
+  const dividas = [
+    { id: 'a', nome: 'Cartão', saldo: 3000, taxa: 0.135, minimo: 450, cartao: true },
+    { id: 'b', nome: 'Cheque especial', saldo: 1200, taxa: 0.08, minimo: 150 },
+    { id: 'c', nome: 'Consignado', saldo: 8000, taxa: 0.018, minimo: 380 },
+  ];
+  const semTeto = compararOrdens(dividas, 1000);
+  const comTeto = compararOrdens(dividas, 1000, COM_TETO);
+  perto(semTeto.diferencaJuros, 280.26);
+  perto(comTeto.diferencaJuros, -165.11);
+});
+
+/* ------------------------------------------------------------------ *
+ * Casos do plano de validação: não têm cartão no teto, não podem mudar
+ * ------------------------------------------------------------------ */
+
+const casoCida = (faturaComoCartao = false) => ([
+  { id: 'f', nome: 'Fatura parcelada', saldo: 1878, taxa: 0.089, minimo: 312, cartao: faturaComoCartao },
+  { id: 'e', nome: 'Empréstimo', saldo: 4000, taxa: 0.0377, minimo: 310 },
+  { id: 'k', nome: 'Carnê', saldo: 712, taxa: 0, minimo: 89 },
+]);
+
+test('caso A (Cida) continua dando os mesmos números', () => {
+  perto(taxaImplicita(4000, 310, 18) * 100, 3.77, 0.005);
+
+  for (const faturaComoCartao of [false, true]) {
+    const dividas = casoCida(faturaComoCartao);
+    const r = retrato(dividas, 2600);
+    perto(r.totalDevido, 6590);
+    perto(r.parcelasNoMes, 711);
+    assert.equal(Math.round(r.comprometimentoDaRenda * 100), 27);
+    assert.deepEqual(ordemPorJuros(dividas), ['f', 'e', 'k']);
+    perto(900 - r.parcelasNoMes, 189);
+
+    for (const opcoes of [{}, COM_TETO]) {
+      const c = compararOrdens(dividas, 900, opcoes);
+      assert.equal(c.porJuros.meses, 9);
+      perto(c.diferencaJuros, 203.56);
+      assert.equal(c.diferencaMeses, 1);
+      // Marcada como cartão, a fatura acaba no mês 5 com ~R$ 511 de juros,
+      // longe do teto de R$ 1.878: o teto nunca é atingido.
+      assert.deepEqual(c.porJuros.noTeto, []);
+      assert.deepEqual(c.porSaldo.noTeto, []);
+    }
+  }
+});
+
+test('caso B (Zé) continua dando os mesmos números e os três avisos', () => {
+  const dividas = [
+    { id: 'q', nome: 'Cheque especial', saldo: 4500, taxa: 0.077, minimo: 130 },
+    { id: 'e', nome: 'Empréstimo', saldo: 9000, taxa: 0.0575, minimo: 650 },
+  ];
+  const r = retrato(dividas, 1350);
+  perto(r.totalDevido, 13500);
+  perto(r.jurosNoMes, 864);
+  perto(r.parcelasNoMes, 780);
+
+  // Os três avisos: a parcela não cobre os juros, a sobra fica abaixo do
+  // mínimo existencial e, com o valor em branco, a dívida não acaba.
+  assert.equal(r.parcelaCobreJuros, false);
+  const me = situacaoMinimoExistencial(1350, r.parcelasNoMes);
+  perto(me.sobra, 570);
+  assert.equal(me.abaixoDoMinimo, true);
+  const ordem = ordemPorJuros(dividas);
+  assert.equal(simularQuitacao(dividas, r.parcelasNoMes, ordem).fecha, false);
+
+  perto(saldoDepoisDe(dividas, r.parcelasNoMes, ordem, 12), 15333.27);
+  perto(saldoDepoisDe(dividas, r.parcelasNoMes, ordem, 12, COM_TETO), 15333.27);
 });
