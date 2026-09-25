@@ -375,6 +375,7 @@ input[type="text"]:hover { border-color: var(--muted); }
   cursor: pointer;
 }
 .botao:hover { background: var(--ink); color: var(--paper); }
+.botao:disabled { opacity: .45; cursor: not-allowed; }
 
 .botao-forte {
   background: var(--accent); border-color: var(--accent); color: #FFFFFF;

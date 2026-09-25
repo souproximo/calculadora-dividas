@@ -88,6 +88,11 @@
       <h2>Escrever as dívidas</h2>
       <p class="destaque">Uma linha para cada dívida. Se você não souber algum número, tudo bem — a página diz o que dá para fazer sem ele.</p>
 
+      <!-- Este formulário nunca é enviado: a conta é feita pelo calculadora.js
+           e nada sai do aparelho. Por isso os campos não têm "name" (sem name,
+           nada vai para a URL) e o botão nasce desabilitado — só o script liga,
+           depois de assumir o envio. Se o script não carregar, o botão fica
+           parado em vez de mandar o que a pessoa digitou para o endereço. -->
       <form id="formulario" novalidate>
 
         <div id="lista-dividas" class="lista-dividas"></div>
@@ -104,19 +109,19 @@
             <p class="campo">
               <label for="renda">O que entra por mês</label>
               <span class="ajuda">O que sobra depois dos descontos — o valor que realmente cai na conta.</span>
-              <input type="text" id="renda" name="renda" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00">
+              <input type="text" id="renda" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00">
             </p>
 
             <p class="campo">
               <label for="disponivel">Quanto dá para separar por mês para as dívidas</label>
               <span class="ajuda">Se deixar em branco, a conta usa a soma das parcelas que você escreveu acima.</span>
-              <input type="text" id="disponivel" name="disponivel" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00">
+              <input type="text" id="disponivel" inputmode="decimal" autocomplete="off" placeholder="R$ 0,00">
             </p>
           </div>
         </fieldset>
 
         <div class="acoes-conta">
-          <button type="submit" class="botao botao-forte">Fazer a conta</button>
+          <button type="submit" id="fazer-conta" class="botao botao-forte" disabled>Fazer a conta</button>
           <button type="button" id="limpar" class="botao botao-fino">Apagar tudo</button>
         </div>
 
