@@ -21,6 +21,7 @@ import {
   saldoDepoisDe,
   situacaoMinimoExistencial,
   MINIMO_EXISTENCIAL,
+  MINIMO_EXISTENCIAL_CONFERIDO_EM,
   TETO_CARTAO_CONFERIDO_EM,
 } from './calculo.js';
 
@@ -305,7 +306,7 @@ function calcular(evento) {
       `Tirando as parcelas, sobram ${emReais(me.sobra)} por mês para viver. ` +
       `A lei brasileira chama de mínimo existencial o valor que precisa sobrar depois de pagar as dívidas, e hoje esse valor é de ${emReais(MINIMO_EXISTENCIAL)} por mês.`,
       'Isso não é um diagnóstico — quem reconhece o superendividamento é o Procon, a Defensoria ou a Justiça. Mas é um sinal forte de que a renegociação não devia ser feita sozinha. Leve este retrato a um desses canais.',
-      notaRodape('Decreto 11.150/2022, com a redação do Decreto 11.567/2023. O Supremo julgou o tema em 23/04/2026 e determinou que o valor seja revisto todo ano, além de garantir a mesma proteção ao crédito consignado. Conferido em 21/09/2026.'),
+      notaRodape(`Decreto 11.150/2022, com a redação do Decreto 11.567/2023. O Supremo julgou o tema em 23/04/2026 e determinou que o valor seja revisto todo ano, além de garantir a mesma proteção ao crédito consignado. Conferido em ${emData(MINIMO_EXISTENCIAL_CONFERIDO_EM)}.`),
     ));
   }
 

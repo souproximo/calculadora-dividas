@@ -20,3 +20,6 @@ src/
 
 # Os testes rodam na máquina de quem mantém.
 teste/
+
+# Scripts de manutenção, rodados na máquina de quem mantém.
+ferramentas/

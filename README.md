@@ -86,7 +86,7 @@ Sem dependência nenhuma: usa o test runner que já vem no Node 18+.
 node --test
 ```
 
-São 44 testes, em três arquivos:
+São 45 testes, em quatro arquivos:
 
 - `teste/calculo.test.mjs` cobre a leitura de números escritos como brasileiro
   escreve (`1.234,56`), o cálculo da taxa implícita, a simulação mês a mês
@@ -102,6 +102,8 @@ São 44 testes, em três arquivos:
   enviado pelo navegador se o script não carregar: nenhum campo tem `name`,
   não há `action` nem `method`, e o botão "Fazer a conta" nasce desabilitado
   e só é ligado pelo `calculadora.js`.
+- `teste/conferido.test.mjs` garante que a data de verificação é a mesma em
+  todos os lugares onde aparece.
 
 ## O que envelhece aqui (regra 05)
 
@@ -116,7 +118,7 @@ reconferir. A lista completa do que muda:
 | Nomes dos **relatórios** do Meu BC | `index.html` → Passo 1 | a própria tela do Meu BC |
 | **Canais oficiais** citados | `index.html` → seção “Onde pedir ajuda” | Procon, Defensoria, consumidor.gov.br, CRAS |
 | **Limite de juros do cartão** (juros e encargos até 100% do valor original) | `calculo.js` → `TETO_CARTAO_CONFERIDO_EM`, aviso em `calculadora.js` | Lei 14.690/2023, art. 28 (planalto.gov.br), e Resolução CMN 5.112/2023 (bcb.gov.br). Tem data própria, mostrada no aviso |
-| **Data de verificação** | `index.html` (selo do cabeçalho, nota do rodapé), `calculo.js` (`MINIMO_EXISTENCIAL_CONFERIDO_EM`) e o aviso do mínimo existencial em `calculadora.js` | mudar os quatro juntos |
+| **Data de verificação** | `index.html` (selo do cabeçalho, nota do rodapé) e `calculo.js` (`MINIMO_EXISTENCIAL_CONFERIDO_EM`, que o aviso do mínimo existencial mostra) | depois de conferir o resto da tabela, `node ferramentas/conferido.mjs hoje` troca todos juntos; um teste falha se ficarem diferentes |
 
 Campanhas de renegociação com desconto (tipo Desenrola) **não são citadas nesta
 página de propósito**: abrem e fecham com prazo curto, e informação de prazo
