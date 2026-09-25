@@ -45,7 +45,7 @@ Se a mudança pedida esbarra numa delas, diga isso em vez de contornar.
 node --test
 ```
 
-40 testes, sem instalar nada. Rode antes de entregar. Mexeu em fórmula ou em
+44 testes, sem instalar nada. Rode antes de entregar. Mexeu em fórmula ou em
 cabeçalho, escreva teste junto — é o que impede a próxima mudança de desfazer
 esta sem ninguém perceber.
 

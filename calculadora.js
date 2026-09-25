@@ -545,6 +545,9 @@ function tabelaOrdem(dividas, ordem, simulacao, comOrdem = true) {
  * ------------------------------------------------------------------ */
 
 $('#formulario').addEventListener('submit', calcular);
+// O botão vem desabilitado no HTML para o formulário não poder ser enviado
+// pelo navegador se este script falhar. Só liga depois de o envio ser nosso.
+$('#fazer-conta').disabled = false;
 
 $('#adicionar').addEventListener('click', () => {
   const no = adicionarDivida();

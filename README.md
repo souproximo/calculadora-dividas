@@ -58,7 +58,7 @@ calculadora.css     estilo, com as fontes e a versão de impressão
 calculadora.js      a tela: lê campos, chama a conta, escreve o resultado
 calculo.js          a conta: funções puras, sem tela e sem rede
 src/worker.js       serve a página em /dividas e aplica os cabeçalhos
-teste/              testes da conta e do Worker
+teste/              testes da conta, do formulário e do Worker
 fonts/              10 arquivos .woff2 + as duas licenças SIL OFL
 wrangler.jsonc      configuração do deploy na Cloudflare
 .assetsignore       o que fica no repositório mas não vai para o ar
@@ -86,7 +86,7 @@ Sem dependência nenhuma: usa o test runner que já vem no Node 18+.
 node --test
 ```
 
-São 40 testes, em dois arquivos:
+São 44 testes, em três arquivos:
 
 - `teste/calculo.test.mjs` cobre a leitura de números escritos como brasileiro
   escreve (`1.234,56`), o cálculo da taxa implícita, a simulação mês a mês
@@ -98,6 +98,10 @@ São 40 testes, em dois arquivos:
   `/dividas`, os caminhos relativos resolvendo debaixo dele, e os cabeçalhos
   de segurança saindo em toda resposta. O binding de arquivos da Cloudflare é
   simulado com o disco.
+- `teste/formulario.test.mjs` garante que o formulário não tem como ser
+  enviado pelo navegador se o script não carregar: nenhum campo tem `name`,
+  não há `action` nem `method`, e o botão "Fazer a conta" nasce desabilitado
+  e só é ligado pelo `calculadora.js`.
 
 ## O que envelhece aqui (regra 05)
 
