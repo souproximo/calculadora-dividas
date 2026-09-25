@@ -520,7 +520,7 @@ footer .dominio {
 }
 footer .dominio a { text-decoration: none; color: var(--ink); }
 footer .nota { font-size: 14.5px; color: var(--muted); max-width: 42ch; margin: 6px 0 0; }
-.compartilhar { flex-basis: 100%; order: -1; }
+.compartilhar { flex-basis: 100%; order: -1; margin-bottom: 18px; }
 .compartilhar .nota { margin-top: 0; }
 .compartilhar-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0 0; }
 .compartilhar-acoes a.botao { text-decoration: none; display: inline-block; }
