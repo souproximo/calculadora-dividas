@@ -377,7 +377,7 @@ export function compararOrdens(dividas, disponivel, opcoes = {}) {
 
 /**
  * Valor do mínimo existencial fixado pelo Decreto 11.567/2023, que alterou o
- * Decreto 11.150/2022. Conferido em 21/09/2026.
+ * Decreto 11.150/2022. Conferido em 25/09/2026.
  *
  * O Supremo julgou o tema em 23/04/2026 (ADPFs 1005, 1006 e 1097): manteve o
  * valor, determinou revisão anual pelo Conselho Monetário Nacional e derrubou
@@ -387,7 +387,7 @@ export function compararOrdens(dividas, disponivel, opcoes = {}) {
  * também a data de verificação que aparece na tela.
  */
 export const MINIMO_EXISTENCIAL = 600;
-export const MINIMO_EXISTENCIAL_CONFERIDO_EM = '2026-09-21';
+export const MINIMO_EXISTENCIAL_CONFERIDO_EM = '2026-09-25';
 
 /**
  * Compara o que sobra da renda depois das parcelas com o mínimo existencial.
