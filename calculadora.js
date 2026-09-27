@@ -354,6 +354,9 @@ function calcular(evento) {
         'A regra é simples e sempre a mesma: pague a parcela combinada de todas as dívidas e jogue todo o dinheiro que sobrar na dívida de juros mais altos. ' +
         'Quando ela acabar, o que sobrava vai inteiro para a próxima da lista.',
       ));
+      // Logo acima da tabela, e sai também na impressão: quem leva o papel
+      // ao credor precisa ver que a ordem não pesa o que se perde atrasando.
+      saida.append(antesDaOrdem());
     }
 
     saida.append(tabelaOrdem(dividas, ordemJuros, porJuros, varias));
@@ -499,6 +502,19 @@ function calcular(evento) {
 function emData(iso) {
   const [ano, mes, dia] = iso.split('-');
   return `${dia}/${mes}/${ano}`;
+}
+
+/** Ressalva sobre a ordem por juros. Tom de ressalva, não de alarme. */
+function antesDaOrdem() {
+  const caixa = el('div', 'ressalva antes-da-ordem');
+  caixa.append(el('span', 'label', 'Antes de seguir esta ordem'));
+  caixa.append(el('p', null,
+    'Esta ordem olha só os juros. Ela não sabe o que acontece se você atrasar uma conta.'));
+  caixa.append(el('p', null,
+    'Se atrasar pode tirar alguma coisa de você (a moto ou o carro que você usa para trabalhar, a casa, a luz, a água) ou se for pensão, pague essa em dia primeiro, mesmo que os juros sejam menores.'));
+  caixa.append(el('p', null,
+    'Esta parte da página ainda está sendo conferida por quem atende gente endividada.'));
+  return caixa;
 }
 
 function notaRodape(texto) {

@@ -158,6 +158,25 @@ header.ficha { border-top: 2px solid var(--ink); padding-top: 20px; }
   text-wrap: balance;
 }
 
+/* Selo de "em teste": discreto, perto do título. Leva a classe .contato,
+   então não sai na impressão. */
+.em-teste {
+  display: inline-block;
+  max-width: 100%;
+  margin: 14px 0 0;
+  padding: 3px 10px 4px;
+  border: 1px solid var(--rule);
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  overflow-wrap: anywhere;
+}
+.em-teste strong {
+  font-family: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.11em;
+  text-transform: uppercase; color: var(--muted);
+}
+
 .tese {
   font-size: clamp(19px, 2.6vw, 23px);
   line-height: 1.38;
@@ -283,6 +302,7 @@ ol.passos > li::before {
 .ressalva p { margin: 0 0 12px; font-size: 16px; line-height: 1.55; color: var(--ink-soft); }
 .ressalva p:last-child { margin-bottom: 0; }
 #resultado .contato { margin: 28px 0 0; color: var(--muted); }
+.antes-da-ordem { margin: 0 0 22px; }
 
 /* ---------- formulário ---------- */
 
